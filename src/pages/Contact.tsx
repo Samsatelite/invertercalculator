@@ -86,6 +86,24 @@ const Contact = () => {
 
       if (error) throw error;
 
+      // Send email notification
+      try {
+        await supabase.functions.invoke('send-contact-notification', {
+          body: {
+            name: data.name,
+            email: data.email || null,
+            phone: data.phone || null,
+            location: data.location || null,
+            message: data.message,
+            contactMethod: data.contactMethod,
+            inverterSizing: inverterSizing,
+          },
+        });
+      } catch (emailError) {
+        console.error('Email notification failed:', emailError);
+        // Don't fail the form submission if email fails
+      }
+
       setShowConfirmation(true);
       form.reset();
     } catch (error) {
@@ -252,12 +270,12 @@ const Contact = () => {
 
       {/* Confirmation Dialog */}
       <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader className="text-center">
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-success/10">
+        <DialogContent className="sm:max-w-md flex flex-col items-center text-center">
+          <DialogHeader className="flex flex-col items-center text-center w-full">
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-success/10">
               <CheckCircle2 className="h-8 w-8 text-success" />
             </div>
-            <DialogTitle className="text-xl">Message Sent Successfully!</DialogTitle>
+            <DialogTitle className="text-xl text-center">Message Sent Successfully!</DialogTitle>
             <DialogDescription className="text-center">
               Thank you for reaching out. Our expert team will contact you shortly via your preferred method.
             </DialogDescription>
