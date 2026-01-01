@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Zap, Activity, AlertTriangle, Lightbulb, Eye, RotateCcw } from 'lucide-react';
+import { Zap, Activity, AlertTriangle, Lightbulb, List, RotateCcw } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { StatCard } from './StatCard';
@@ -126,7 +126,7 @@ export const ResultsPanel = memo(function ResultsPanel({
           onClick={onViewDetails}
           disabled={!hasResults}
         >
-          <Eye className="h-4 w-4 mr-2" />
+          <List className="h-4 w-4 mr-2" />
           View Details
         </Button>
       </div>

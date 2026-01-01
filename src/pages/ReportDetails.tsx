@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { ArrowLeft, Download, Share2, Zap, Activity, AlertTriangle, Lightbulb } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -318,12 +318,12 @@ const ReportDetails = () => {
               <p className="text-sm text-muted-foreground">
                 InverterSize.com - Your Inverter Planning Tool
               </p>
-              <a 
-                href="/contact" 
+              <Link 
+                to="/contact" 
                 className="text-sm text-primary hover:text-primary/80 underline underline-offset-4 mt-2 inline-block"
               >
                 Contact an Expert
-              </a>
+              </Link>
             </div>
           </div>
         </main>
