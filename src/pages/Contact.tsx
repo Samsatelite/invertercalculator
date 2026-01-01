@@ -89,19 +89,38 @@ const Contact = () => {
 
       // Send email notification
       try {
-        await supabase.functions.invoke('send-contact-notification', {
-          body: {
-            name: data.name,
-            email: data.email || null,
-            phone: data.phone || null,
-            location: data.location || null,
-            message: data.message,
-            contactMethod: data.contactMethod,
-            inverterSizing: inverterSizing,
-          },
-        });
+        const { error: emailError } = await supabase.functions.invoke(
+          'send-contact-notification',
+          {
+            body: {
+              name: data.name,
+              email: data.email || null,
+              phone: data.phone || null,
+              location: data.location || null,
+              message: data.message,
+              contactMethod: data.contactMethod,
+              inverterSizing: inverterSizing,
+            },
+          }
+        );
+
+        if (emailError) {
+          console.error('Email notification failed:', emailError);
+          toast({
+            title: 'Message saved, but email failed',
+            description:
+              'Your message was saved successfully, but we could not send the email notification. Please try again in a moment.',
+            variant: 'destructive',
+          });
+        }
       } catch (emailError) {
         console.error('Email notification failed:', emailError);
+        toast({
+          title: 'Message saved, but email failed',
+          description:
+            'Your message was saved successfully, but we could not send the email notification. Please try again in a moment.',
+          variant: 'destructive',
+        });
         // Don't fail the form submission if email fails
       }
 

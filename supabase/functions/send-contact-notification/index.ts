@@ -13,15 +13,25 @@ interface ContactNotificationRequest {
   location: string | null;
   message: string;
   contactMethod: string;
-  inverterSizing: {
-    totalWattage: number;
-    recommendedInverterSize: number;
-    appliances: Array<{
-      name: string;
-      wattage: number;
-      quantity: number;
-    }>;
-  } | null;
+  // Note: frontend stores sizing as { appliances, calculations }, but keep backwards compatibility
+  inverterSizing:
+    | {
+        // legacy shape
+        totalWattage?: number;
+        recommendedInverterSize?: number;
+        appliances?: Array<{
+          name: string;
+          wattage: number;
+          quantity: number;
+        }>;
+        // current shape
+        calculations?: {
+          totalLoad?: number;
+          requiredKva?: number;
+          recommendedInverter?: number;
+        };
+      }
+    | null;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -39,9 +49,24 @@ const handler = async (req: Request): Promise<Response> => {
     const data: ContactNotificationRequest = await req.json();
     console.log("Received contact notification request:", data);
 
-    const appliancesList = data.inverterSizing?.appliances
-      ?.map(a => `${a.name} (${a.wattage}W x ${a.quantity})`)
-      .join("<br>") || "No appliances selected";
+    const appliances = data.inverterSizing?.appliances ?? [];
+    const appliancesList = appliances.length
+      ? appliances
+          .map((a) => `${a.name} (${a.wattage}W x ${a.quantity})`)
+          .join("<br>")
+      : "No appliances selected";
+
+    const totalWattage =
+      data.inverterSizing?.totalWattage ??
+      data.inverterSizing?.calculations?.totalLoad ??
+      null;
+
+    const recommendedInverterKva =
+      data.inverterSizing?.recommendedInverterSize ??
+      data.inverterSizing?.calculations?.recommendedInverter ??
+      null;
+
+    const requiredKva = data.inverterSizing?.calculations?.requiredKva ?? null;
 
     const emailHtml = `
       <h1>New Contact Form Submission</h1>
@@ -55,13 +80,13 @@ const handler = async (req: Request): Promise<Response> => {
       
       <h2>Inverter Sizing Details</h2>
       ${data.inverterSizing ? `
-        <p><strong>Total Wattage:</strong> ${data.inverterSizing.totalWattage}W</p>
-        <p><strong>Recommended Inverter Size:</strong> ${data.inverterSizing.recommendedInverterSize} kVA</p>
+        <p><strong>Total Load:</strong> ${totalWattage ?? "N/A"}W</p>
+        <p><strong>Required:</strong> ${requiredKva ?? "N/A"} kVA</p>
+        <p><strong>Recommended Inverter:</strong> ${recommendedInverterKva ?? "N/A"} kVA</p>
         <h3>Selected Appliances:</h3>
         <p>${appliancesList}</p>
       ` : "<p>No inverter sizing data available</p>"}
     `;
-
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
