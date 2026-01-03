@@ -11,8 +11,6 @@ import { Button } from '@/components/ui/button';
 import { Zap } from 'lucide-react';
 
 export type DialogType = 
-  | 'heavy-duty-first' 
-  | 'ac-fan-conflict' 
   | 'disabled-appliance'
   | null;
 
@@ -35,18 +33,6 @@ export const EnergyEfficiencyDialog = memo(function EnergyEfficiencyDialog({
 }: EnergyEfficiencyDialogProps) {
   const getContent = () => {
     switch (dialogType) {
-      case 'heavy-duty-first':
-        return {
-          subtitle: 'It is recommended to switch off other household appliances when using heavy-duty device.',
-          confirmText: 'Turn OFF',
-          cancelText: 'Leave ON',
-        };
-      case 'ac-fan-conflict':
-        return {
-          subtitle: 'We noticed you have fans already selected. Do you wish to switch them OFF while selecting the AC?',
-          confirmText: 'Turn OFF Fan',
-          cancelText: 'Leave ON',
-        };
       case 'disabled-appliance':
         return {
           subtitle: `Using this appliance alongside ${heavyDutyNames.join(', ')} will require a very large inverter size. Do you wish to proceed?`,

@@ -22,8 +22,6 @@ const Index = () => {
     addCustomEquipment,
     removeCustomEquipment,
     updateCustomEquipmentQuantity,
-    turnOffNonEssentials,
-    turnOffFans,
     forceAddAppliance,
     resetAll,
     calculations,
@@ -39,7 +37,6 @@ const Index = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogType, setDialogType] = useState<DialogType>(null);
   const [pendingAppliance, setPendingAppliance] = useState<ApplianceWithQuantity | null>(null);
-  const [isFirstHeavyDutySelection, setIsFirstHeavyDutySelection] = useState(true);
 
   // Store sizing data in sessionStorage for the contact form
   useEffect(() => {
@@ -74,37 +71,10 @@ const Index = () => {
     }
   }, [selectedAppliances, customEquipment, calculations, activeCount]);
 
-  // Handle quantity update with dialog checks
+  // Handle quantity update
   const handleUpdateQuantity = useCallback((id: string, quantity: number) => {
-    const appliance = selectedAppliances.find(a => a.id === id);
-    
-    if (!appliance) {
-      updateQuantity(id, quantity);
-      return;
-    }
-
-    // Check for first heavy-duty selection
-    if (appliance.isHeavyDuty && quantity > 0 && !hasHeavyDutySelected && isFirstHeavyDutySelection) {
-      setIsFirstHeavyDutySelection(false);
-      setPendingAppliance(appliance);
-      setDialogType('heavy-duty-first');
-      setDialogOpen(true);
-      // Still proceed with selection
-      updateQuantity(id, quantity);
-      return;
-    }
-
-    // Check for AC + Fan conflict
-    if (id === 'air_conditioner' && quantity > 0 && hasFansSelected) {
-      setPendingAppliance(appliance);
-      setDialogType('ac-fan-conflict');
-      setDialogOpen(true);
-      updateQuantity(id, quantity);
-      return;
-    }
-
     updateQuantity(id, quantity);
-  }, [selectedAppliances, hasHeavyDutySelected, hasFansSelected, isFirstHeavyDutySelection, updateQuantity]);
+  }, [updateQuantity]);
 
   // Handle clicking on disabled appliance
   const handleDisabledApplianceClick = useCallback((appliance: ApplianceWithQuantity) => {
@@ -115,18 +85,14 @@ const Index = () => {
 
   // Dialog actions
   const handleDialogConfirm = useCallback(() => {
-    if (dialogType === 'heavy-duty-first') {
-      turnOffNonEssentials();
-    } else if (dialogType === 'ac-fan-conflict') {
-      turnOffFans();
-    } else if (dialogType === 'disabled-appliance' && pendingAppliance) {
+    if (dialogType === 'disabled-appliance' && pendingAppliance) {
       // Force enable the appliance WITHOUT resetting others
       forceAddAppliance(pendingAppliance.id);
     }
     setDialogOpen(false);
     setDialogType(null);
     setPendingAppliance(null);
-  }, [dialogType, pendingAppliance, turnOffNonEssentials, turnOffFans, forceAddAppliance]);
+  }, [dialogType, pendingAppliance, forceAddAppliance]);
 
   const handleDialogCancel = useCallback(() => {
     setDialogOpen(false);
@@ -188,12 +154,14 @@ const Index = () => {
                       key={cat.id}
                       categoryId={cat.id}
                       appliances={cat.appliances}
+                      allAppliances={selectedAppliances}
                       onUpdateQuantity={handleUpdateQuantity}
                       variantSelections={variantSelections}
                       onUpdateVariantSelection={updateVariantSelection}
                       onDisabledApplianceClick={handleDisabledApplianceClick}
                       hasHeavyDutySelected={hasHeavyDutySelected}
                       hasSoloOnlySelected={hasSoloOnlySelected}
+                      hasFansSelected={hasFansSelected}
                       selectedHeavyDutyIds={selectedHeavyDutyIds}
                     />
                   ))}

@@ -143,11 +143,11 @@ export const appliances: Appliance[] = [
   { id: 'router', name: 'WiFi Router', wattage: 15, surge: 1, category: 'office', icon: 'Wifi', isHeavyDuty: false, soloOnly: false },
   { id: 'phone_charger', name: 'Phone Charger', wattage: 10, surge: 1, category: 'office', icon: 'Smartphone', isHeavyDuty: false, soloOnly: false },
 
-  // Heavy Duty - Air Conditioner with variants (no multiple)
-  { id: 'air_conditioner', name: 'Air Conditioner', wattage: 900, surge: 3, category: 'heavy-duty', icon: 'AirVent', isHeavyDuty: true, soloOnly: false, hasVariants: true, allowMultiple: false },
+  // Heavy Duty - Air Conditioner with variants
+  { id: 'air_conditioner', name: 'Air Conditioner', wattage: 900, surge: 3, category: 'heavy-duty', icon: 'AirVent', isHeavyDuty: true, soloOnly: false, hasVariants: true, allowMultiple: true },
   
-  // Heavy Duty - Refrigerator with variants (no multiple)
-  { id: 'refrigerator', name: 'Refrigerator', wattage: 350, surge: 3, category: 'heavy-duty', icon: 'Refrigerator', isHeavyDuty: true, soloOnly: false, hasVariants: true, allowMultiple: false },
+  // Heavy Duty - Refrigerator with variants
+  { id: 'refrigerator', name: 'Refrigerator', wattage: 350, surge: 3, category: 'heavy-duty', icon: 'Refrigerator', isHeavyDuty: true, soloOnly: false, hasVariants: true, allowMultiple: true },
   
   // Heavy Duty - Solo only appliances
   { id: 'microwave', name: 'Microwave Oven', wattage: 1200, surge: 2, category: 'heavy-duty', icon: 'Microwave', isHeavyDuty: true, soloOnly: true },

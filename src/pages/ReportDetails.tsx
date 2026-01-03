@@ -314,16 +314,21 @@ const ReportDetails = () => {
             </div>
 
             {/* Footer */}
-            <div className="text-center pt-4 pb-8">
+            <div className="text-center pt-4 pb-8 space-y-4">
+              <div className="bg-muted rounded-lg p-4">
+                <p className="text-sm text-muted-foreground">
+                  If you plan to operate very heavy equipment or power your business, consult a qualified inverter engineer to determine the correct inverter system size.
+                </p>
+                <Link 
+                  to="/contact" 
+                  className="text-sm text-primary hover:text-primary/80 underline underline-offset-4 mt-2 inline-block font-medium"
+                >
+                  Contact an Expert
+                </Link>
+              </div>
               <p className="text-sm text-muted-foreground">
                 InverterSize.com - Your Inverter Planning Tool
               </p>
-              <Link 
-                to="/contact" 
-                className="text-sm text-primary hover:text-primary/80 underline underline-offset-4 mt-2 inline-block"
-              >
-                Contact an Expert
-              </Link>
             </div>
           </div>
         </main>
