@@ -137,10 +137,10 @@ const Index = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <h2 className="font-display text-2xl font-bold text-foreground">
-                    Select Your Appliances
+                    Calculate the Right Interver Size
                   </h2>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Choose the appliances you want to power during backup
+                    Select your appliances and get an accurate inverter recommendation.
                   </p>
                 </div>
                 {activeCount > 0 && (
