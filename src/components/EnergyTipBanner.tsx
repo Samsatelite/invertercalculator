@@ -6,7 +6,7 @@ export function EnergyTipBanner() {
       <AlertTitle className="text-primary font-display font-semibold">
         Important Tips
       </AlertTitle>
-      <AlertDescription className="text-muted-foreground mt-2 space-y-1">
+      <AlertDescription className="text-muted-foreground mt-2 space-y-1 text-xs">
         <p>1. Use only energy-saving appliances to get the best performance.</p>
         <p>2. Avoid running multiple heavy-duty devices at the same time.</p>
       </AlertDescription>
