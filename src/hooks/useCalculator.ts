@@ -15,7 +15,7 @@ import type { CustomEquipment } from '@/components/CustomEquipmentInput';
 import { CATEGORY_SURGE } from '@/components/CustomEquipmentInput';
 
 // Constants
-const POWER_FACTOR = 0.8;
+const POWER_FACTOR = 0.97;
 const SAFETY_MARGIN = 1.2; // 20% safety margin
 const SURGE_DIVERSITY = 0.5; // Only 50% of max surge applied
 
